@@ -1,0 +1,69 @@
+# =====================
+# Python / Environment
+# =====================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+
+# =====================
+# PyCharm
+# =====================
+.idea/
+
+# =====================
+# EEG DATA (CRITICAL)
+# =====================
+Data Set/
+topomaps/
+topomaps_augmented*/
+Topomaps*
+topomaps_real*/
+topomaps_synth*/
+*.edf
+*.set
+*.fif
+*.npz
+
+# =====================
+# Diffusion outputs
+# =====================
+checkpoints/
+weights/
+generated/
+samples/
+*.pt
+*.pth
+*.ckpt
+
+# =====================
+# Evaluation artifacts
+# =====================
+eval_ablation_final/
+eval_real_only/
+journal_figs/
+
+# =====================
+# Paper build files
+# =====================
+paper/*.pdf
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.bbl
+paper/*.blg
+
+# =====================
+# Logs
+# =====================
+logs/
+runs/
+wandb/
+
+# =====================
+# OS
+# =====================
+.DS_Store
+Thumbs.db
