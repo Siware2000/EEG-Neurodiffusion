@@ -29,6 +29,10 @@ This repository provides the **complete research codebase** used for diffusion-b
 - Designed for reproducible research workflows  
 
 ---
+| Paper Component | Script |
+|----------------|--------|
+| Ablation Table | journal_stats_from_classification_report.py |
+| Degradation Table | journal_degradation_analysis.py |
+| Effect Size Table | journal_effect_size_tables.py |
 
-## Repository Structure
 
