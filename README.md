@@ -1,126 +1,149 @@
-# EEG-Neurodiffusion
+EEG-Neurodiffusion
 
-**Topology-Preserving Diffusion Models for EEG Topomaps and Cognitive Load Classification**
+Topology-Preserving Diffusion Models for EEG Topomaps and Cognitive Load Classification
 
-EEG-Neurodiffusion is a diffusion-based generative modeling framework for EEG topographic representations (EEG topomaps) and EEG-derived images, with applications in data augmentation, cross-subject generalization, and cognitive load classification.
+EEG-Neurodiffusion is a research-grade framework for diffusion-based generative modeling of EEG scalp topographic maps (topomaps), with a focus on topology preservation, controlled data augmentation, and robust cognitive load classification under subject-independent evaluation.
 
-This repository contains the **complete research codebase** used in the paper:
+This repository contains the complete, reproducible codebase used in the paper:
 
-> **EEG-Neurodiffusion: Topology-Preserving Diffusion Models with Vision Transformers for Cognitive Load Classification**
+EEG-Neurodiffusion: Topology-Preserving Diffusion Models with Vision Transformers for Cognitive Load Classification
 
----
+Motivation
 
-## Overview
+Electroencephalography (EEG) signals are characterized by:
 
-Electroencephalography (EEG) signals are characterized by low signal-to-noise ratio, inter-subject variability, and strong spatial dependencies. While GAN-based augmentation has been explored for EEG data, such approaches often suffer from mode collapse, unstable training, and limited diversity.
+Low signal-to-noise ratio
 
-**EEG-Neurodiffusion** explores *denoising diffusion probabilistic models (DDPMs)* as a stable and principled alternative for high-fidelity EEG synthesis, with a particular focus on:
+Strong inter-subject variability
 
-- EEG scalp topographic maps (topomaps)
-- Topology-preserving generation
-- Class-conditional diffusion
-- Controlled synthetic data injection
-- Robust evaluation under frozen checkpoints
+Spatial correlations induced by volume conduction and cortical geometry
 
-The framework is explicitly designed to study **when diffusion helps, when it hurts, and how quality control mechanisms mitigate negative transfer**.
+Limited labeled data and class imbalance
 
----
+While generative models are often used to augment EEG data, uncontrolled synthetic injection can distort spatial relationships between electrodes, introducing samples that are statistically plausible yet physiologically implausible.
 
-## Key Contributions
+EEG-Neurodiffusion studies diffusion models not as a guaranteed performance booster, but as a risk-sensitive augmentation mechanism whose benefits depend critically on topology preservation and quality control.
 
-- Topology-preserving EEG diffusion using conditional DDPMs  
-- U-Net–based diffusion backbone  
-- Multi-band EEG topomaps encoded as image channels  
-- Synthetic data quality control strategies:
-  - Raw diffusion augmentation  
-  - Selective (class-aware) diffusion injection  
-  - Classifier-guided filtering (J2)  
-- Frozen-checkpoint ablation protocol for fair comparison  
-- Vision Transformer (ViT) downstream classifier  
-- Journal-grade statistical, degradation, and interpretability analysis  
+Core Idea
 
----
+We explore denoising diffusion probabilistic models (DDPMs) trained on EEG scalp topomaps, combined with a Vision Transformer (ViT) classifier, and systematically analyze:
 
-## Repository Structure
+When diffusion helps
 
+When diffusion hurts
+
+Why naive augmentation fails
+
+How topology-aware quality control mitigates negative transfer
+
+Rather than reporting only peak accuracy, this work emphasizes failure-mode analysis under frozen, reproducible evaluation.
+
+Key Contributions
+
+Topology-preserving EEG diffusion modeling using conditional DDPMs
+
+Multi-band EEG topomaps encoded as image channels
+
+U-Net diffusion backbone with class conditioning
+
+Synthetic data quality control strategies:
+
+Raw diffusion augmentation
+
+Selective (class-aware) diffusion injection
+
+Classifier-guided filtering (J2)
+
+Topology preservation metrics:
+
+Radial PSD correlation
+
+Electrode-distance Mantel correlation
+
+Direct topology preservation score
+
+Frozen-checkpoint ablation protocol for fair comparison
+
+Vision Transformer (ViT) as a topology-sensitive downstream classifier
+
+Journal-ready statistical testing, degradation analysis, and interpretability
+
+Repository Structure
 EEG-Neurodiffusion/
 │
-├── src/ # Core diffusion & evaluation code
-│ ├── diffusion/ # DDPM + U-Net implementation
-│ ├── vit/ # Vision Transformer classifier
-│ ├── metrics/ # MMD, PSD similarity, SSIM
-│ └── eval/ # Evaluation utilities
+├── src/                     # Core modeling & evaluation code
+│   ├── diffusion/            # DDPM + U-Net implementation
+│   ├── vit/                  # Vision Transformer classifier
+│   ├── metrics/              # MMD, PSD similarity, topology metrics
+│   └── scripts/              # Training, evaluation, analysis scripts
 │
 ├── paper/
-│ ├── tables/ # LaTeX-ready tables
-│ ├── journal_outputs/ # CSV outputs from analysis scripts
-│ ├── journal_figs/ # Confusion matrices, ROC, attention maps
-│ └── main.tex # Journal manuscript
+│   ├── tables/               # LaTeX-ready tables
+│   ├── journal_outputs/      # CSV outputs from analysis scripts
+│   ├── journal_figs/         # Confusion matrices, ROC, attention maps
+│   └── main.tex              # Journal manuscript
 │
-├── checkpoints/ # Saved diffusion and ViT checkpoints
-├── datasets/ # Preprocessed EEG topomaps (not included)
-├── scripts/ # Training and generation scripts
+├── checkpoints/              # Saved diffusion and ViT checkpoints
+├── datasets/                 # Preprocessed EEG topomaps (not included)
+├── requirements.txt
 └── README.md
 
+Reproducibility & Paper Mapping
 
----
+This repository is structured to exactly reproduce all reported tables and figures without retraining.
 
-## Reproducibility & Paper Mapping
+Paper Component	Script
+Ablation Table	journal_stats_from_classification_report.py
+Degradation Analysis	journal_degradation_analysis.py
+Effect Size Tables	journal_effect_size_tables.py
+Statistical Testing	journal_stats_from_classification_report.py
+Confusion Matrices	eval_confusion_matrices.py
+ROC / AUC Curves	eval_roc_curves.py
+ViT Attention Rollout	eval_attention_rollout.py
+Topology Metrics	run_topology_eval.py, summarize_topology.py
 
-This repository is structured to **exactly reproduce all tables and figures reported in the paper without retraining**.
+All results are generated using frozen checkpoints and a fixed real test split.
 
-| Paper Component | Script |
-|-----------------|--------|
-| Ablation Table | `journal_stats_from_classification_report.py` |
-| Degradation Table | `journal_degradation_analysis.py` |
-| Effect Size Table | `journal_effect_size_tables.py` |
-| Bootstrap Confidence Intervals | `journal_stats_from_classification_report.py` |
-| Confusion Matrices | `eval_confusion_matrices.py` |
-| ROC / AUC Curves | `eval_roc_curves.py` |
-| ViT Attention Rollout | `eval_attention_rollout.py` |
+Evaluation Protocol (Frozen-Checkpoint)
 
-All evaluations use **frozen checkpoints** and a **fixed real test split**.
+To isolate the effect of diffusion-based augmentation:
 
----
+Each augmentation regime is trained once
 
-## Evaluation Protocol (Frozen-Checkpoint)
+All evaluations reuse saved checkpoints
 
-To isolate the effect of diffusion-based augmentation strategies, we adopt a **frozen-checkpoint evaluation protocol**:
+No retraining is required to reproduce results
 
-- Each augmentation regime is trained once
-- All comparisons use saved model checkpoints
-- No retraining is required to reproduce results
-- Subject-independent data splits are enforced
-- Synthetic samples are generated **only from training data**
-- No validation or test data leakage occurs
+Subject-independent splits are strictly enforced
 
-This protocol ensures **fair, stable, and reproducible comparisons**.
+Synthetic samples are generated only from training data
 
----
+No validation or test leakage occurs
 
-## Key Findings (Summary)
+This ensures fair, stable, and reproducible comparisons.
 
-- Naive diffusion augmentation is **not automatically beneficial** and can significantly degrade EEG classification performance  
-- Explicit quality control is essential when using diffusion-generated EEG samples  
-- Selective diffusion provides the most reliable trade-off, preserving most real-only performance  
-- Classifier-guided filtering reduces harmful outliers but may underutilize informative diversity  
-- Diffusion augmentation should be framed as **damage control rather than guaranteed improvement**
+Key Findings (High-Level)
 
----
+Naive diffusion augmentation can significantly degrade performance
 
-## Notes
+Spectral similarity alone does not guarantee spatial consistency
 
-⚠ **Important:**  
-Diffusion-based augmentation for EEG should always be paired with explicit quality control. Uncontrolled synthetic injection may distort class-conditional manifolds and reduce generalization.
+Diffusion models can generate visually plausible but topologically distorted EEG samples
 
----
+Selective, class-aware diffusion provides the best robustness–performance trade-off
 
-## Requirements
+Confidence-only filtering (J2) is conservative but incomplete
 
-- Python ≥ 3.9  
-- PyTorch ≥ 1.13  
-- NumPy, SciPy, scikit-learn  
-- matplotlib  
-- timm (Vision Transformer models)
+Diffusion augmentation should be treated as damage control, not guaranteed improvement
 
-Exact versions used in the paper are listed in `requirements.txt`.
+Neurophysiological Perspective
+
+From a neurophysiological standpoint, EEG electrodes measure correlated activity from overlapping cortical sources due to volume conduction and anatomical proximity. Preserving local electrode neighborhood structure is therefore critical.
+
+Synthetic topomaps that match global spectral statistics but violate these spatial dependencies may encode physiologically implausible activation patterns, explaining their negative impact on downstream classification despite high visual fidelity.
+
+Neurophysiological Perspective
+
+From a neurophysiological standpoint, EEG electrodes measure correlated activity from overlapping cortical sources due to volume conduction and anatomical proximity. Preserving local electrode neighborhood structure is therefore critical.
+
+Synthetic topomaps that match global spectral statistics but violate these spatial dependencies may encode physiologically implausible activation patterns, explaining their negative impact on downstream classification despite high visual fidelity.
