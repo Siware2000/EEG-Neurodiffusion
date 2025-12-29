@@ -138,3 +138,74 @@ degradation_table.csv
 
 LaTeX table: paper/tables/degradation_table.tex
 
+### Table 3 — Effect Size Analysis
+python journal_effect_size_tables.py
+
+Generates:
+
+effect_size_table.csv
+
+LaTeX table: paper/tables/effect_size_table.tex
+### Table 4 — Topology Preservation Metrics
+
+python run_topology_eval.py
+python summarize_topology.py
+
+Generates:
+
+topology_metrics.csv
+
+LaTeX tables:
+
+paper/tables/topology_summary.tex
+
+paper/tables/topology_by_class.tex
+### Reproducing Figures
+All figures are saved under:
+
+paper/journal_figs/
+### Confusion Matrices
+python eval_confusion_matrices.py
+Generates normalized confusion matrices for all augmentation regimes.
+
+### ROC / AUC Curves
+python eval_roc_curves.py
+Generates one-vs-rest ROC curves and macro-average AUC plots.
+
+### Vision Transformer Attention Rollout
+python eval_attention_rollout.py
+Generates ViT attention rollout overlays for qualitative inspection.
+
+### Data Integrity & Leakage Control
+The following safeguards are strictly enforced throughout the pipeline:
+
+Subject-independent train / test splits
+
+Synthetic samples generated only from training subjects
+
+No validation or test data used during diffusion training
+
+Evaluation performed only on real test samples
+
+Synthetic data is never mixed with evaluation data
+
+Identical evaluation code and thresholds across all regimes
+### Notes for Reviewers and Editors
+Diffusion augmentation is not assumed to improve performance
+
+Results are framed in terms of robustness and degradation control
+
+Confidence intervals are reported using bootstrap resampling
+
+Effect sizes are reported to quantify magnitude of change
+
+All scripts are deterministic given fixed checkpoints
+
+Reported trends are reproducible without retraining
+
+### Summary
+This repository enables exact reproduction of all reported results and figures
+using fixed checkpoints and deterministic evaluation scripts.
+
+The reproducibility design ensures that conclusions reflect true augmentation behavior
+rather than experimental noise.
