@@ -1,4 +1,4 @@
-##EEG-Neurodiffusion
+%%EEG-Neurodiffusion
 
 Topology-Preserving Diffusion Models for EEG Topomaps and Cognitive Load Classification
 
